@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include "lib/nlohmann/json.hpp"
+#include "lib/date/date.h"
 
 struct Information {
     int num;
@@ -15,7 +18,134 @@ int InitializeList(Status* room) {
     room->next = nullptr;
     return 0;
 }
+void reservRoom() {
+    std::fstream fileRoom("lib/room.json", std::ios::in | std::ios::out);
+    nlohmann::json jsonData;
 
+    if(fileRoom.is_open()){
+        fileRoom >> jsonData;
+        std::string category;
+
+        std::cout << "Qual categoria de quarto voce quer?" << std::endl;
+        std::cout << "Basic: $50/dia | Lux: $100/dia | SuperLux: $150/dia" << std::endl;
+        
+        do{
+            std::getline(std::cin >> std::ws,category);  
+            for(int i = 0;i < category.size();i++){
+                category[i] = tolower(category[i]);
+            }
+            if(category != "basic" && category != "lux" && category != "superlux"){
+                std::cout << "Categoria invalida!" << std::endl;
+            }
+        }while(category != "basic" && category != "lux" && category != "superlux");
+
+        std::cout << "Ponha uma data de inicio (Estrutura: dd/mm/aaaa): ";
+        std::string startDateStr;
+        std::getline(std::cin, startDateStr);
+        std::istringstream startDateStream(startDateStr);
+        date::sys_time<std::chrono::milliseconds> startDate;
+        startDateStream >> date::parse("%d/%m/%Y", startDate);
+
+        std::cout << "Quantos dias voce pretende ficar?" << std::endl;
+        int days;
+        std::cin >> days;
+
+        auto endDate = startDate + date::days(days);
+        nlohmann::json rooms = jsonData["category"][category];
+        
+        bool foundRoom = false;
+        for (auto& room : rooms) {
+            if (!room["occupied"]) {
+                int roomPrice = room["price"].get<double>();
+                int totalPrice = roomPrice * days;
+                std::cout << "Seu quarto: " << room["number"] << std::endl;
+                std::cout << "Preco total por " << days << " dias: $" << totalPrice << ",00" << std::endl;
+                std::cout << "Data de inicio: " << date::format("%d/%m/%Y", startDate) << std::endl;
+                std::cout << "Data de fim: " << date::format("%d/%m/%Y", endDate) << std::endl;
+                foundRoom = true;
+                room["occupied"] = true;
+                room["start_date"] = date::format("%d/%m/%Y", startDate);
+                room["end_date"] = date::format("%d/%m/%Y", endDate);
+                break;
+            }
+        }
+        if (!foundRoom) {
+            std::cout << "Nao temos quartos disponiveis nessa categoria." << std::endl;
+            return;
+        }
+        
+        jsonData["category"][category] = rooms;
+        
+        fileRoom.seekp(0);
+
+        fileRoom << std::setw(4) << jsonData << std::endl;
+
+        fileRoom.close();
+
+        system("pause");
+        system("cls");
+    }
+}
+void listReservationPerPeriod(){
+
+    std::ifstream listRoom("lib/room.json");
+
+    if(listRoom.is_open()){
+        nlohmann::json jsonData;
+        listRoom >> jsonData;
+        bool reservFind = false;
+
+        std::cout << "Ponha a data de inicio (Estrutura: dd/mm/aaaa): ";
+        std::string startDateStr;
+        std::getline(std::cin >> std::ws, startDateStr);
+
+        std::istringstream startDateStream(startDateStr);
+        date::sys_time<std::chrono::milliseconds> startDate;
+        startDateStream >> date::parse("%d/%m/%Y", startDate);
+
+        std::cout << "Ponha a data de fim (Estrutura: dd/mm/aaaa): ";
+        std::string endDateStr;
+        std::getline(std::cin >> std::ws, endDateStr);
+        
+        std::istringstream endDateStream(endDateStr);
+        date::sys_time<std::chrono::milliseconds> endDate;
+        endDateStream >> date::parse("%d/%m/%Y", endDate);
+
+        for (const auto& category : jsonData["category"].items()) {
+            for (const auto& reservation : category.value()) {
+                if (reservation.contains("start_date") && reservation.contains("end_date")){
+                    std::string reservationStartDateStr = reservation["start_date"];
+                    std::istringstream reservationStartDateStream(reservationStartDateStr);
+                    date::sys_days reservationStartDate;
+                    reservationStartDateStream >> date::parse("%d/%m/%Y", reservationStartDate);
+
+                    std::string reservationEndDateStr = reservation["end_date"];
+                    std::istringstream reservationEndDateStream(reservationEndDateStr);
+                    date::sys_days reservationEndDate;
+                    reservationEndDateStream >> date::parse("%d/%m/%Y", reservationEndDate);
+
+                    if (reservationStartDate >= startDate && reservationEndDate <= endDate) {
+                        std::cout << "Detalhes de reversa:" << std::endl;
+                        std::cout << "Categoria: " << category.key() << std::endl;
+                        std::cout << "Data de inicio: " << reservationStartDateStr << std::endl;
+                        std::cout << "Data de fim: " << reservationEndDateStr << std::endl;
+                        if (reservation.contains("occupiedBy")) {
+                            std::cout << "Ocupada por: " << reservation["occupiedBy"] << std::endl;
+                        }
+                        std::cout << "Numero do quarto: " << reservation["number"] << std::endl;
+                        std::cout << std::endl;
+                        reservFind = true;
+                    }
+                }
+            }
+        }
+        if(!reservFind){
+            std::cout << "Nao tem reservas nesse periodo!\n";      
+        }
+    }
+    system("pause");
+    system("cls");  
+}
 void Register(Status* room) {
 
     char option;
@@ -127,7 +257,12 @@ int main(){
                 std::cout << "\nDigite o quarto desejado: ";
                 std::cin >> RoomNumber;
                 RoomStatus(room, RoomNumber);
-
+            break;
+            case 6:
+                reservRoom();
+            break;
+            case 8:
+                listReservationPerPeriod();
             break;
         }
     }while(decision != 9);
