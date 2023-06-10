@@ -109,10 +109,10 @@ void reservRoom() {
     if(fileRoom.is_open()){
         fileRoom >> jsonData;
         std::string category;
+        std::string clientName;
 
         std::cout << "Qual categoria de quarto voce quer?" << std::endl;
         std::cout << "Basic: $50/dia | Lux: $100/dia | SuperLux: $150/dia" << std::endl;
-        
         do{
             std::getline(std::cin >> std::ws,category);  
             for(int i = 0;i < category.size();i++){
@@ -123,6 +123,9 @@ void reservRoom() {
             }
         }while(category != "basic" && category != "lux" && category != "superlux");
 
+        std::cout << "Digite o nome do reservador:\n";
+        std::getline(std::cin >> std::ws,clientName);
+        
         std::cout << "Ponha uma data de inicio (Estrutura: dd/mm/aaaa): ";
         std::string startDateStr;
         std::getline(std::cin, startDateStr);
@@ -150,6 +153,7 @@ void reservRoom() {
                 room["occupied"] = true;
                 room["start_date"] = date::format("%d/%m/%Y", startDate);
                 room["end_date"] = date::format("%d/%m/%Y", endDate);
+                room["occupiedBy"] = clientName;
                 break;
             }
         }
