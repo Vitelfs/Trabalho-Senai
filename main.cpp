@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <conio.h>
 #include "lib/nlohmann/json.hpp"
 #include "lib/date/date.h"
 
@@ -11,12 +12,95 @@ struct Information {
     int status;
     Information* next;
 };
-
+struct Client{
+    std::string name;
+    std::string cpf;
+    std::string password;
+};
 typedef Information Status;
 
 int InitializeList(Status* room) {
     room->next = nullptr;
     return 0;
+}
+void register_scrn() {
+    system("cls");
+    std::ifstream file("lib/clientData.json");
+    nlohmann::json data;
+
+    if (file.is_open()) {
+        file >> data;
+        file.close();
+    }
+    else {
+        std::cout << "Flha ao abrir o arquivp\n";
+        return;
+    }
+
+    Client clientRegistrationData;
+
+    std::cout << "#######################\n";
+    std::cout << "##  Tela de registro  ##\n";
+    std::cout << "#######################\n";
+
+    std::cout << "Ponha o seu nome completo:\n";
+    std::getline(std::cin >> std::ws, clientRegistrationData.name);
+
+    for(int i = 0;i < clientRegistrationData.name.size();i++){
+        clientRegistrationData.name[i] = tolower(clientRegistrationData.name[i]);
+    }
+
+    std::cout << "Ponha o seu cpf(Apenas numeros): ";
+    std::cin >> clientRegistrationData.cpf;
+    std::cout << "Ponha a sua senha:\n";
+    std::cin >> clientRegistrationData.password;
+
+    
+    nlohmann::json clientData;
+    clientData["name"] = clientRegistrationData.name;
+    clientData["cpf"] = clientRegistrationData.cpf;
+    clientData["password"] = clientRegistrationData.password;
+
+    data.push_back(clientData);
+
+    std::ofstream outputFile("lib/clientData.json");
+    if (outputFile.is_open()) {
+        outputFile << data.dump(4) << std::endl;
+        outputFile.close();
+        std::cout << "Registrado com sucesso\n";
+    }
+    else {
+        std::cout << "Falha ao abrir o arquivo para armazenamento\n";
+    }
+}
+void listAllClients(){
+    std::fstream clientsData("lib/clientData.json");
+    nlohmann::json jsonData;
+    int clientNum = 1;
+    if(clientsData.is_open()){
+        clientsData >> jsonData;
+
+        if (jsonData.empty()) {
+        std::cout << "A lista de clientes esta vazia!" << std::endl;
+        system("pause");
+        system("cls");
+        return;
+        }
+        else{
+            for(const auto& client : jsonData){
+                std::cout << "Client "<< clientNum << ":" << client["name"] << std::endl;
+                clientNum++;
+                std::cout << std::endl;
+            }
+            clientsData.close();
+        }
+    } 
+    else {
+        std::cout << "Falha ao abrir o arquivo de Data dos clientes\n" << std::endl;
+    }
+
+    system("pause");
+    system("cls");
 }
 void reservRoom() {
     std::fstream fileRoom("lib/room.json", std::ios::in | std::ios::out);
@@ -246,6 +330,12 @@ int main(){
 
         std::cin >> decision;
         switch(decision){
+            case 1:
+                register_scrn();
+                break;
+            case 2:
+                listAllClients();
+                break;
             case 3 :
                 std::cout << "=== Registrar quarto ===" << std::endl;
                 Register(room);
