@@ -6,13 +6,13 @@
 #include "lib/nlohmann/json.hpp"
 #include "lib/date/date.h"
 
-struct Information {
+struct Information { 
     int num;
     std::string category;
     int status;
     Information* next;
 };
-struct Client{
+struct Client{ //victor
     std::string name;
     std::string cpf;
     std::string password;
@@ -23,7 +23,7 @@ int InitializeList(Status* room) {
     room->next = nullptr;
     return 0;
 }
-void register_scrn() {
+void register_scrn() { //victor
     system("cls");
     std::ifstream file("lib/clientData.json");
     nlohmann::json data;
@@ -73,7 +73,7 @@ void register_scrn() {
         std::cout << "Falha ao abrir o arquivo para armazenamento\n";
     }
 }
-void listAllClients(){
+void listAllClients(){ //victor
     std::fstream clientsData("lib/clientData.json");
     nlohmann::json jsonData;
     int clientNum = 1;
@@ -102,7 +102,7 @@ void listAllClients(){
     system("pause");
     system("cls");
 }
-void reservRoom() {
+void reservRoom() { //victor
     std::fstream fileRoom("lib/room.json", std::ios::in | std::ios::out);
     nlohmann::json jsonData;
 
@@ -174,7 +174,7 @@ void reservRoom() {
         system("cls");
     }
 }
-void listReservationPerPeriod(){
+void listReservationPerPeriod(){ //victor
 
     std::ifstream listRoom("lib/room.json");
 
