@@ -112,7 +112,7 @@ void reservRoom() { //victor
         std::string clientName;
 
         std::cout << "Qual categoria de quarto voce quer?" << std::endl;
-        std::cout << "Basic: $50/dia | Lux: $100/dia | SuperLux: $150/dia" << std::endl;
+        std::cout << "Basic: R$50/dia | Lux: R$100/dia | SuperLux: R$150/dia" << std::endl;
         do{
             std::getline(std::cin >> std::ws,category);  
             for(int i = 0;i < category.size();i++){
