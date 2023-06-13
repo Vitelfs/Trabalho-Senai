@@ -5,6 +5,7 @@
 #include <conio.h>
 #include "lib/nlohmann/json.hpp"
 #include "lib/date/date.h"
+#include "RegisterRoom.cpp"
 
 struct Information { 
     int num;
