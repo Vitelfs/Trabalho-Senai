@@ -9,7 +9,7 @@
 
 void listReservationPerPeriod(){ //victor
 
-    std::ifstream listRoom("room.json");
+    std::ifstream listRoom("lib/room.json");
 
     if(listRoom.is_open()){
         nlohmann::json jsonData;
