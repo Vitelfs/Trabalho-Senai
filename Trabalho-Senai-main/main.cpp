@@ -33,8 +33,14 @@ int main(){
             break;
             case 4 :
             break;
+            case 5:
+                listAllRooms();
+            break;
             case 6:
                 reservRoom();
+            break;
+            case 7:
+                OpenReserveList();
             break;
             case 8:
                 listReservationPerPeriod();
