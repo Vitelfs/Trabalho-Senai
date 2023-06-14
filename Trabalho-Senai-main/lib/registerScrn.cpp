@@ -10,7 +10,7 @@ struct Client{ //victor
 };
 void register_scrn() { //victor
     system("cls");
-    std::ifstream file("clientData.json");
+    std::ifstream file("lib/clientData.json");
     nlohmann::json data;
 
     if (file.is_open()) {
@@ -18,7 +18,7 @@ void register_scrn() { //victor
         file.close();
     }
     else {
-        std::cout << "Flha ao abrir o arquivp\n";
+        std::cout << "Falha ao abrir o arquivp\n";
         return;
     }
 
