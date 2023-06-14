@@ -8,7 +8,7 @@
 
 
 void reservRoom() { //victor
-    std::fstream fileRoom("room.json", std::ios::in | std::ios::out);
+    std::fstream fileRoom("lib/room.json", std::ios::in | std::ios::out);
     nlohmann::json jsonData;
 
     if(fileRoom.is_open()){
