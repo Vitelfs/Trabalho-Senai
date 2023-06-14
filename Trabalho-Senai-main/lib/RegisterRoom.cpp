@@ -5,21 +5,21 @@
 
 void Register() {
 
-    int num,option, price;
+    int option, price;
 	nlohmann::json Data;
-	std:: string category;
-	std::fstream Room("room.json");
+	std:: string category, num;
+	std::fstream Room("lib/room.json");
 	
 	if(Room.is_open()){
 	    Room >> Data;
 	    std::cout << "Digite o numero do quarto: ";
-	    std::cin >> num;
-	    
-	    std::cout << "Digite a categoria:";
-	    std::cout << "\n1- Superlux";
-	    std::cout << "\n2- lux";
-	    std::cout << "\n3- Basic\nR:";
-	    std::cin >> option;
+	    std:: cin >> num;
+
+	    std:: cout << "Digite a categoria:";
+	    std:: cout << "\n1- Superlux";
+	    std:: cout << "\n2- lux";
+	    std:: cout << "\n3- Basic\nR:";
+	    std:: cin >> option;
 	    
 	    switch(option){
 	        case 1:
@@ -37,11 +37,13 @@ void Register() {
 	    }
 	    
 	    nlohmann::json Room_Json;
+
 	    Room_Json ["number"] = num;
         Room_Json ["occupied"] = false;
 	    Room_Json ["price"] = price;
 	    
 	    Data["category"][category].push_back(Room_Json);
+
             Room.seekp(0);
     
             Room << std::setw(4) << Data << std::endl;
@@ -49,7 +51,7 @@ void Register() {
             Room.close();
         
 	}else{
-        std:: cout << "Arquivo nao aberto";
+        std:: cout << "Arquivo não aberto\n";
     }
     
 }
