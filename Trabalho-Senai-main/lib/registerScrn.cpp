@@ -48,7 +48,7 @@ void register_scrn() { //victor
 
     data.push_back(clientData);
 
-    std::ofstream outputFile("clientData.json");
+    std::ofstream outputFile("lib/clientData.json");
     if (outputFile.is_open()) {
         outputFile << data.dump(4) << std::endl;
         outputFile.close();
