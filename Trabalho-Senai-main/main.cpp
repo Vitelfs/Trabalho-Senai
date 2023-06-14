@@ -32,6 +32,7 @@ int main(){
                 Register();
             break;
             case 4 :
+                ListRooms();
             break;
             case 5:
                 listAllRooms();
