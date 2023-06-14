@@ -5,3 +5,4 @@
 #include "lib/RegisterRoom.cpp"
 #include "lib/unclosedReservs.cpp"
 #include "lib/listAllRoom.cpp"
+#include "lib/ListRooms.cpp"
