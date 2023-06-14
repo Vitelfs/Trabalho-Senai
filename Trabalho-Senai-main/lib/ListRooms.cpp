@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "nlohmann/json.hpp"
+
 void ListRooms() {
     
     std::ifstream Room("lib/room.json");
@@ -11,7 +16,7 @@ void ListRooms() {
             for (const auto& room : category.value()) {
                 std::cout << "Numero: " << room["number"] << std::endl;
                 std::cout << "Estatus: " << room["occupied"] << std::endl;
-                std::cout << "Preço: " << room["price"] << std::endl;
+                std::cout << "PreÃ§o: " << room["price"] << std::endl;
                 std::cout << std::endl;
             }
         }
