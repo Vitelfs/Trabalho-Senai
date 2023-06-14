@@ -14,8 +14,8 @@ int main(){
               << "2 Listar clientes\n"
               << "3 Cadastrar quartos\n"
               << "4 Listar quartos exibindo o status\n"
-              << "5 listar apenas quartos disponíveis\n"
-              << "6 Reservar quartos para os dias disponíveis\n"
+              << "5 listar apenas quartos disponiveis\n"
+              << "6 Reservar quartos para os dias disponiveis\n"
               << "7 Listar todas as reversas em aberto\n"
               << "8 Listar todas as reversas por período\n"
               << "9 Sair\n";
