@@ -4,4 +4,4 @@
 #include "lib/reservRoom.cpp"
 #include "lib/RegisterRoom.cpp"
 #include "lib/unclosedReservs.cpp"
-
+#include "lib/listAllRoom.cpp"
