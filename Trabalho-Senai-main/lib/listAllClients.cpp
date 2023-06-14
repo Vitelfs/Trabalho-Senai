@@ -4,7 +4,7 @@
 #include "nlohmann/json.hpp"
 
 void listAllClients(){ //victor
-    std::fstream clientsData("clientData.json");
+    std::fstream clientsData("lib/clientData.json");
     nlohmann::json jsonData;
     int clientNum = 1;
     if(clientsData.is_open()){
