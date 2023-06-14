@@ -18,7 +18,7 @@ void listAllClients(){ //victor
         }
         else{
             for(const auto& client : jsonData){
-                std::cout << "Client "<< clientNum << ":" << client["name"] << std::endl;
+                std::cout << "Cliente "<< clientNum << ":" << client["name"] << std::endl;
                 clientNum++;
                 std::cout << std::endl;
             }
